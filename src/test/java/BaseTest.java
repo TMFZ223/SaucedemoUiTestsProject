@@ -23,15 +23,11 @@ public class BaseTest {
     }
 
     @AfterMethod
-    public void takeScreenShotOnFailure(ITestResult testResult) throws IOException {
+    public void tearDown(ITestResult testResult) throws IOException {
         if (testResult.getStatus() == ITestResult.FAILURE) {
             File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(scrFile, new File("failure tests\\" + testResult.getName() + ".jpg"));
         }
-    }
-
-    @AfterMethod
-    public void tearDown() {
         driver.quit();
     }
 }
