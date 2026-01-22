@@ -17,7 +17,7 @@ public class LoginTest extends BaseTest {
         loginButton.click();
         WebElement title = driver.findElement(By.cssSelector("[data-test='title']"));
         assertTrue(title.isDisplayed(), "Заголовок не появился");
-        String expectedTitleText = "Productsino";
+        String expectedTitleText = "Products";
         assertEquals(title.getText(), expectedTitleText);
     }
 
