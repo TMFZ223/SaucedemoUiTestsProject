@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.time.Duration;
 
 public class BaseTest {
-    private WebDriver driver;
+    protected WebDriver driver;
     LoginPage loginPage;
     ProductsPage productsPage;
 
