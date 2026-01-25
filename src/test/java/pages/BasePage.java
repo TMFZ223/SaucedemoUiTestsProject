@@ -8,9 +8,10 @@ import java.time.Duration;
 abstract class BasePage {
     public static final String BASE_URL = "https://www.saucedemo.com/";
     WebDriver driver;
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    WebDriverWait wait;
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 }
