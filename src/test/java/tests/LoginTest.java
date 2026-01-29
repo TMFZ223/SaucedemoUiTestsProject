@@ -1,5 +1,6 @@
 package tests;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -14,39 +15,20 @@ public class LoginTest extends BaseTest {
         assertEquals(productsPage.checkTitleText(), "Products");
     }
 
-    @Test(testName = "Негативный тест на логин – ввод неизвестного значения имени пользователя")
-    public void negativeLoginTestWithUnknownUsername() {
-        loginPage.open();
-        loginPage.login("standarduser", "secret_sauce");
-        assertTrue(loginPage.checkDisplayingError(), "Ошибка не появилась");
-        String expectedErrorMessage = "Epic sadface: Username and password do not match any user in this service";
-        assertEquals(loginPage.checkErrorMessage(), expectedErrorMessage);
+    @DataProvider
+    public Object[][] negativeTestLoginData() {
+        return new Object[][]{
+                {"standarduser", "secret_sauce", "Epic sadface: Username and password do not match any user in this service"},
+                {"locked_out_user", "secret_sauce", "Epic sadface: Sorry, this user has been locked out."},
+                {"", "secret_sauce", "Epic sadface: Username is required"},
+                {"standard_user", "", "Epic sadface: Password is required"}};
     }
 
-    @Test(testName = "Негативный тест на логин – ввод заблокированного значения имени пользователя")
-    public void negativeLoginTestWithLockedOutUsername() {
+    @Test(dataProvider = "negativeTestLoginData", testName = "Негативный тест на логин")
+    public void negativeLoginTest(String userName, String password, String expectedErrorMessage) {
         loginPage.open();
-        loginPage.login("locked_out_user", "secret_sauce");
+        loginPage.login(userName, password);
         assertTrue(loginPage.checkDisplayingError(), "Ошибка не появилась");
-        String expectedErrorMessage = "Epic sadface: Sorry, this user has been locked out.";
-        assertEquals(loginPage.checkErrorMessage(), expectedErrorMessage);
-    }
-
-    @Test(testName = "Негативный тест на логин – ввод пустого значения имени пользователя")
-    public void negativeLoginTestWithEmptyUsername() {
-        loginPage.open();
-        loginPage.login("", "secret_sauce");
-        assertTrue(loginPage.checkDisplayingError(), "Ошибка не появилась");
-        String expectedErrorMessage = "Epic sadface: Username is required";
-        assertEquals(loginPage.checkErrorMessage(), expectedErrorMessage);
-    }
-
-    @Test(testName = "Негативный тест на логин – ввод пустого значения пароля")
-    public void negativeLoginTestWithEmptyPassword() {
-        loginPage.open();
-        loginPage.login("standard_user", "");
-        assertTrue(loginPage.checkDisplayingError(), "Ошибка не появилась");
-        String expectedErrorMessage = "Epic sadface: Password is required";
         assertEquals(loginPage.checkErrorMessage(), expectedErrorMessage);
     }
 }
