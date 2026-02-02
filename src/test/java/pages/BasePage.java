@@ -9,7 +9,7 @@ import java.time.Duration;
 abstract class BasePage {
     public static final String BASE_URL = "https://www.saucedemo.com/";
     public static final String DATA_TEST_PATTERN = "[data-test='%s']";
-    protected final By title = By.cssSelector("[data-test='title']");
+    protected final By title = By.cssSelector(DATA_TEST_PATTERN.formatted("title"));
     WebDriver driver;
     WebDriverWait wait;
 
