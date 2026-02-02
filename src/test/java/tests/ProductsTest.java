@@ -30,8 +30,8 @@ public class ProductsTest extends BaseTest {
         assertEquals(productsPage.checkCartCounter(), "2");
     }
 
-    @Test(testName = "Добавление и удаление случайного товара из корзины")
-    public void addAndDeleteRandProductTest() {
+    @Test(testName = "Добавление и удаление случайного товара из корзины на странице продуктов")
+    public void addAndDeleteRandProductInProductPageTest() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
         String randomProduct = expectedProducts.get(random.nextInt(expectedProducts.size()));
@@ -41,8 +41,8 @@ public class ProductsTest extends BaseTest {
         assertEquals(productsPage.checkCartText(), "");
     }
 
-    @Test(testName = "Добавление и удаление двух товаров из корзины")
-    public void addAndRemoveFromCartTwoProductsTest() {
+    @Test(testName = "Добавление и удаление двух товаров из корзины на странице продуктов")
+    public void addAndRemoveFromCartTwoProductsInProductsPageTest() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
         productsPage.addToCart(expectedProducts.get(1), expectedProducts.get(3));
