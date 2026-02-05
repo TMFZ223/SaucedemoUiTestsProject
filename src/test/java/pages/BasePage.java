@@ -1,7 +1,10 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.PropertyReader;
 
@@ -19,11 +22,24 @@ abstract class BasePage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    public boolean checkDisplayingTitle() {
-        return driver.findElement(title).isDisplayed();
+    public WebElement findElement(By locator) {
+        WebElement element = driver.findElement(locator);
+        highlightElement(element);
+        return element;
     }
 
+    private void highlightElement(WebElement element) {
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+        javascriptExecutor.executeScript("arguments[0].style.border='3px solid red'", element);
+    }
+
+    @Step("Проверить наличие заголовка на странице")
+    public boolean checkDisplayingTitle() {
+        return findElement(title).isDisplayed();
+    }
+
+    @Step("Проверить текст заголовка страницы")
     public String checkTitleText() {
-        return driver.findElement(title).getText();
+        return findElement(title).getText();
     }
 }
