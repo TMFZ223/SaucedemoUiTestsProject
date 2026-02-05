@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.Feature;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import user.User;
@@ -7,9 +8,11 @@ import user.UserFactory;
 
 import static org.testng.Assert.*;
 
+
+@Feature("логин")
 public class LoginTest extends BaseTest {
 
-    @Test(testName = "Позитивный тест на логин")
+    @Test(description = "Позитивный тест на логин")
     public void positiveLoginTest() {
         loginPage.open();
         loginPage.login(UserFactory.withAdminPermission());
@@ -26,7 +29,7 @@ public class LoginTest extends BaseTest {
                 {UserFactory.withEmptyPassword(), "Epic sadface: Password is required"}};
     }
 
-    @Test(dataProvider = "negativeTestLoginData", testName = "Негативный тест на логин")
+    @Test(dataProvider = "negativeTestLoginData", description = "Негативный тест на логин")
     public void negativeLoginTest(User user, String expectedErrorMessage) {
         loginPage.open();
         loginPage.login(user);
