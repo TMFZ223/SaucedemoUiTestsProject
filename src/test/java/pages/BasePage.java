@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.PropertyReader;
+import utils.TestListener;
 
 import java.time.Duration;
 
@@ -31,6 +32,7 @@ abstract class BasePage {
     private void highlightElement(WebElement element) {
         JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
         javascriptExecutor.executeScript("arguments[0].style.border='3px solid red'", element);
+        TestListener.takeScreenshot(driver);
     }
 
     @Step("Проверить наличие заголовка на странице")
