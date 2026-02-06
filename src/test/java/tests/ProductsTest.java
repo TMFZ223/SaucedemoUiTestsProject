@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.Feature;
 import org.testng.annotations.Test;
 import user.UserFactory;
 
@@ -8,21 +9,22 @@ import java.util.Random;
 
 import static org.testng.Assert.*;
 
+@Feature("Работа со страницей товаров")
 public class ProductsTest extends BaseTest {
     private Random random = new Random();
     private final List<String> expectedProducts = List.of("Sauce Labs Backpack", "Sauce Labs Bike Light", "Sauce Labs Bolt T-Shirt", "Sauce Labs Fleece Jacket", "Sauce Labs Onesie", "Test.allTheThings() T-Shirt (Red)");
 
-    @Test(testName = "Добавление случайного товара в корзину")
+    @Test(description = "Добавление случайного товара в корзину")
     public void addRandProductTest() {
         loginPage.open();
         loginPage.login(UserFactory.withAdminPermission());
-                String randomProduct = expectedProducts.get(random.nextInt(expectedProducts.size()));
+        String randomProduct = expectedProducts.get(random.nextInt(expectedProducts.size()));
         productsPage.addToCart(randomProduct);
         assertTrue(productsPage.checkVisibilityCartCounter(), "Счётчик корзины не появился на страницы");
         assertEquals(productsPage.checkCartCounter(), "1");
     }
 
-    @Test(testName = "Добавление двух товаров в корзину")
+    @Test(description = "Добавление двух товаров в корзину")
     public void addToCartTwoProductsTest() {
         loginPage.open();
         loginPage.login(UserFactory.withAdminPermission());
@@ -31,7 +33,7 @@ public class ProductsTest extends BaseTest {
         assertEquals(productsPage.checkCartCounter(), "2");
     }
 
-    @Test(testName = "Добавление и удаление случайного товара из корзины на странице продуктов")
+    @Test(description = "Добавление и удаление случайного товара из корзины на странице продуктов")
     public void addAndDeleteRandProductInProductPageTest() {
         loginPage.open();
         loginPage.login(UserFactory.withAdminPermission());
@@ -42,7 +44,7 @@ public class ProductsTest extends BaseTest {
         assertEquals(productsPage.checkCartText(), "");
     }
 
-    @Test(testName = "Добавление и удаление двух товаров из корзины на странице продуктов")
+    @Test(description = "Добавление и удаление двух товаров из корзины на странице продуктов")
     public void addAndRemoveFromCartTwoProductsInProductsPageTest() {
         loginPage.open();
         loginPage.login(UserFactory.withAdminPermission());
