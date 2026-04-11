@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 import user.User;
 import user.UserFactory;
 
+import static enums.PageTitles.Products;
 import static org.testng.Assert.*;
 
 
@@ -17,7 +18,7 @@ public class LoginTest extends BaseTest {
         loginPage.open();
         loginPage.login(UserFactory.withAdminPermission());
         assertTrue(productsPage.checkDisplayingTitle(), "Заголовок не появился");
-        assertEquals(productsPage.checkTitleText(), "Products");
+        assertEquals(productsPage.checkTitleText(), Products.getDisplayName());
     }
 
     @DataProvider

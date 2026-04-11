@@ -7,6 +7,7 @@ import user.UserFactory;
 import java.util.List;
 import java.util.Random;
 
+import static enums.PageTitles.Cart;
 import static org.testng.Assert.*;
 
 @Feature("Работа с корзиной товаров")
@@ -20,7 +21,7 @@ public class CartTest extends BaseTest {
         loginPage.login(UserFactory.withAdminPermission());
         productsPage.swichToCart();
         assertTrue(cartPage.checkDisplayingTitle());
-        assertEquals(cartPage.checkTitleText(), "Your Cart");
+        assertEquals(cartPage.checkTitleText(), Cart.getDisplayName());
     }
 
     @Test(description = "Добавление и просмотр товара в корзине")
