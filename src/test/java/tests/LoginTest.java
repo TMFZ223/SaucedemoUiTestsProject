@@ -7,8 +7,6 @@ import user.User;
 import user.UserFactory;
 
 import static enums.PageTitles.Products;
-import static org.testng.Assert.*;
-
 
 @Feature("логин")
 public class LoginTest extends BaseTest {
@@ -17,8 +15,9 @@ public class LoginTest extends BaseTest {
     public void positiveLoginTest() {
         loginPage.open();
         loginPage.login(UserFactory.withAdminPermission());
-        assertTrue(productsPage.checkDisplayingTitle(), "Заголовок не появился");
-        assertEquals(productsPage.checkTitleText(), Products.getDisplayName());
+        soft.assertTrue(productsPage.checkDisplayingTitle(), "Заголовок не появился");
+        soft.assertEquals(productsPage.checkTitleText(), Products.getDisplayName());
+        soft.assertAll();
     }
 
     @DataProvider
@@ -34,7 +33,8 @@ public class LoginTest extends BaseTest {
     public void negativeLoginTest(User user, String expectedErrorMessage) {
         loginPage.open();
         loginPage.login(user);
-        assertTrue(loginPage.checkDisplayingError(), "Ошибка не появилась");
-        assertEquals(loginPage.checkErrorMessage(), expectedErrorMessage);
+        soft.assertTrue(loginPage.checkDisplayingError(), "Ошибка не появилась");
+        soft.assertEquals(loginPage.checkErrorMessage(), expectedErrorMessage);
+        soft.assertAll();
     }
 }

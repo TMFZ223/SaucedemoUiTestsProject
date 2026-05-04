@@ -4,15 +4,11 @@ import io.qameta.allure.Feature;
 import org.testng.annotations.Test;
 import user.UserFactory;
 
-import java.util.List;
 import java.util.Random;
-
-import static org.testng.Assert.*;
 
 @Feature("Работа со страницей товаров")
 public class ProductsTest extends BaseTest {
     private Random random = new Random();
-    private final List<String> expectedProducts = List.of("Sauce Labs Backpack", "Sauce Labs Bike Light", "Sauce Labs Bolt T-Shirt", "Sauce Labs Fleece Jacket", "Sauce Labs Onesie", "Test.allTheThings() T-Shirt (Red)");
 
     @Test(description = "Добавление случайного товара в корзину")
     public void addRandProductTest() {
@@ -20,8 +16,9 @@ public class ProductsTest extends BaseTest {
         loginPage.login(UserFactory.withAdminPermission());
         String randomProduct = expectedProducts.get(random.nextInt(expectedProducts.size()));
         productsPage.addToCart(randomProduct);
-        assertTrue(productsPage.checkVisibilityCartCounter(), "Счётчик корзины не появился на страницы");
-        assertEquals(productsPage.checkCartCounter(), "1");
+        soft.assertTrue(productsPage.checkVisibilityCartCounter(), "Счётчик корзины не появился на страницы");
+        soft.assertEquals(productsPage.checkCartCounter(), "1");
+        soft.assertAll();
     }
 
     @Test(description = "Добавление двух товаров в корзину")
@@ -29,8 +26,9 @@ public class ProductsTest extends BaseTest {
         loginPage.open();
         loginPage.login(UserFactory.withAdminPermission());
         productsPage.addToCart(expectedProducts.get(2), expectedProducts.get(5));
-        assertTrue(productsPage.checkVisibilityCartCounter(), "Счётчик корзины не появился на страницы");
-        assertEquals(productsPage.checkCartCounter(), "2");
+        soft.assertTrue(productsPage.checkVisibilityCartCounter(), "Счётчик корзины не появился на страницы");
+        soft.assertEquals(productsPage.checkCartCounter(), "2");
+        soft.assertAll();
     }
 
     @Test(description = "Добавление и удаление случайного товара из корзины на странице продуктов")
@@ -39,9 +37,10 @@ public class ProductsTest extends BaseTest {
         loginPage.login(UserFactory.withAdminPermission());
         String randomProduct = expectedProducts.get(random.nextInt(expectedProducts.size()));
         productsPage.addToCart(randomProduct);
-        assertEquals(productsPage.checkCartText(), "1");
+        soft.assertEquals(productsPage.checkCartText(), "1");
         productsPage.removeFromCart(randomProduct);
-        assertEquals(productsPage.checkCartText(), "");
+        soft.assertEquals(productsPage.checkCartText(), "");
+        soft.assertAll();
     }
 
     @Test(description = "Добавление и удаление двух товаров из корзины на странице продуктов")
@@ -49,8 +48,9 @@ public class ProductsTest extends BaseTest {
         loginPage.open();
         loginPage.login(UserFactory.withAdminPermission());
         productsPage.addToCart(expectedProducts.get(1), expectedProducts.get(3));
-        assertEquals(productsPage.checkCartText(), "2");
+        soft.assertEquals(productsPage.checkCartText(), "2");
         productsPage.removeFromCart(expectedProducts.get(1), expectedProducts.get(3));
-        assertEquals(productsPage.checkCartText(), "");
+        soft.assertEquals(productsPage.checkCartText(), "");
+        soft.assertAll();
     }
 }

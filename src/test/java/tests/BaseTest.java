@@ -9,12 +9,14 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
+import org.testng.asserts.SoftAssert;
 import pages.CartPage;
 import pages.LoginPage;
 import pages.ProductsPage;
 import utils.TestListener;
 
 import java.time.Duration;
+import java.util.List;
 
 @Listeners({AllureTestNg.class, TestListener.class})
 public class BaseTest {
@@ -22,6 +24,8 @@ public class BaseTest {
     LoginPage loginPage;
     ProductsPage productsPage;
     CartPage cartPage;
+    SoftAssert soft;
+    List<String> expectedProducts = List.of("Sauce Labs Backpack", "Sauce Labs Bike Light", "Sauce Labs Bolt T-Shirt", "Sauce Labs Fleece Jacket", "Sauce Labs Onesie", "Test.allTheThings() T-Shirt (Red)");
 
     @Parameters({"browser"})
     @BeforeMethod
@@ -45,6 +49,7 @@ public class BaseTest {
         loginPage = new LoginPage(driver);
         productsPage = new ProductsPage(driver);
         cartPage = new CartPage(driver);
+        soft = new SoftAssert();
     }
 
     @AfterMethod(alwaysRun = true)
