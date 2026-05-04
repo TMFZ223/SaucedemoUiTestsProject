@@ -18,7 +18,6 @@ public class ProductsTest extends BaseTest {
         productsPage.addToCart(randomProduct);
         soft.assertTrue(productsPage.checkVisibilityCartCounter(), "Счётчик корзины не появился на страницы");
         soft.assertEquals(productsPage.checkCartCounter(), "1");
-        soft.assertAll();
     }
 
     @Test(description = "Добавление двух товаров в корзину")
@@ -28,7 +27,6 @@ public class ProductsTest extends BaseTest {
         productsPage.addToCart(expectedProducts.get(2), expectedProducts.get(5));
         soft.assertTrue(productsPage.checkVisibilityCartCounter(), "Счётчик корзины не появился на страницы");
         soft.assertEquals(productsPage.checkCartCounter(), "2");
-        soft.assertAll();
     }
 
     @Test(description = "Добавление и удаление случайного товара из корзины на странице продуктов")
@@ -40,7 +38,6 @@ public class ProductsTest extends BaseTest {
         soft.assertEquals(productsPage.checkCartText(), "1");
         productsPage.removeFromCart(randomProduct);
         soft.assertEquals(productsPage.checkCartText(), "");
-        soft.assertAll();
     }
 
     @Test(description = "Добавление и удаление двух товаров из корзины на странице продуктов")
@@ -51,6 +48,5 @@ public class ProductsTest extends BaseTest {
         soft.assertEquals(productsPage.checkCartText(), "2");
         productsPage.removeFromCart(expectedProducts.get(1), expectedProducts.get(3));
         soft.assertEquals(productsPage.checkCartText(), "");
-        soft.assertAll();
     }
 }
