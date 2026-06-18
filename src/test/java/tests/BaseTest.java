@@ -33,7 +33,7 @@ public class BaseTest {
     public void setUp(@Optional("chrome") String browser, ITestContext testContext) {
         if (browser.equalsIgnoreCase("chrome")) {
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--guest");
+            options.addArguments("--headless", "--no-sandbox", "--guest");
             WebDriverManager.chromedriver().setup();
             driver = new ChromeDriver(options);
             driver.manage().window().maximize();
