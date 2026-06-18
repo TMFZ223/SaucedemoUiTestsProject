@@ -1,4 +1,5 @@
 pipeline {
+
     agent any
 
     tools {
@@ -6,25 +7,36 @@ pipeline {
         maven 'Maven3'
     }
 
-    parameters {
-        choice(
-                name: 'BROWSER',
-                choices: ['chrome', 'firefox'],
-                description: 'Select browser')
-    }
-
     stages {
 
         stage('Checkout') {
             steps {
                 git branch: 'master',
-                        url: 'https://github.com/tMFZ223/saucedemoUiTestsProject.git'
+                    url: 'https://github.com/tMFZ223/saucedemoUiTestsProject.git'
             }
         }
 
-        stage('Run Tests') {
+        stage('Clean Project') {
             steps {
-                bat "mvn clean test -P %BROWSER%"
+                bat "mvn clean"
+            }
+        
+
+        stage('Parallel tests') {
+            parallel {
+
+                stage('Chrome') {
+                    steps {
+                        bat 'mvn test -P chrome'
+                    }
+                }
+
+                stage('Firefox') {
+                    steps {
+                        bat 'mvn test -P firefox'
+                    }
+                }
+
             }
         }
     }
@@ -33,17 +45,24 @@ pipeline {
 
         always {
 
-            junit '**/surefire-reports/*.xml'
+            junit(
+                testResults: 'target/surefire-reports/**/*.xml',
+                allowEmptyResults: true
+            )
 
             allure(
-                    results: [[path: 'target/allure-results']]
+                includeProperties: false,
+                results: [[path: 'target/allure-results']]
             )
 
-            archiveArtifacts(
-                    artifacts: 'target/screenshots/**/*.png',
-                    fingerprint: true,
-                    allowEmptyArchive: true
-            )
+            publishHTML([
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'target/surefire-reports',
+                    reportFiles: 'index.html',
+                    reportName: 'TestNG Report'
+            ])
         }
     }
 }
