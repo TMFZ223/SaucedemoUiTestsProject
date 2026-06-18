@@ -17,7 +17,6 @@ public class LoginTest extends BaseTest {
         loginPage.login(UserFactory.withAdminPermission());
         soft.assertTrue(productsPage.checkDisplayingTitle(), "Заголовок не появился");
         soft.assertEquals(productsPage.checkTitleText(), Products.getDisplayName());
-        soft.assertAll();
     }
 
     @DataProvider
@@ -35,6 +34,5 @@ public class LoginTest extends BaseTest {
         loginPage.login(user);
         soft.assertTrue(loginPage.checkDisplayingError(), "Ошибка не появилась");
         soft.assertEquals(loginPage.checkErrorMessage(), expectedErrorMessage);
-        soft.assertAll();
     }
 }

@@ -45,11 +45,12 @@ public class BaseTest {
             throw new IllegalArgumentException("Браузер " + browser + "Не доступен");
         }
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(6));
+        soft = new SoftAssert();
         testContext.setAttribute("driver", driver);
+        testContext.setAttribute("soft", soft);
         loginPage = new LoginPage(driver);
         productsPage = new ProductsPage(driver);
         cartPage = new CartPage(driver);
-        soft = new SoftAssert();
     }
 
     @AfterMethod(alwaysRun = true)

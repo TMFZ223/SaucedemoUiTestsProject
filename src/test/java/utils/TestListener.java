@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
+import org.testng.asserts.SoftAssert;
 
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +20,13 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onTestSuccess(ITestResult iTestResult) {
+        SoftAssert soft = (SoftAssert) iTestResult.getTestContext().getAttribute("soft");
+        try {
+            soft.assertAll();
+        } catch (AssertionError e) {
+            iTestResult.setStatus(ITestResult.FAILURE);
+            iTestResult.setThrowable(e);
+        }
         System.out.printf("======================================== FINISHED TEST %s Duration: %ss ========================================%n", iTestResult.getName(),
                 getExecutionTime(iTestResult));
     }
