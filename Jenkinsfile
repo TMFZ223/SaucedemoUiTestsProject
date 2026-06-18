@@ -20,7 +20,7 @@ pipeline {
             steps {
                 bat "mvn clean"
             }
-        
+        }
 
         stage('Parallel tests') {
             parallel {
