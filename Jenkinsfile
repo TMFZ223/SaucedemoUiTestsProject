@@ -15,11 +15,6 @@ pipeline {
         )
     }
 
-    tools {
-        jdk 'JDK21'
-        maven 'Maven3'
-    }
-
     options {
         timestamps()
         buildDiscarder(logRotator(numToKeepStr: '20'))
