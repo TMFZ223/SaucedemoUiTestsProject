@@ -12,7 +12,7 @@ import static enums.PageTitles.Products;
 public class LoginTest extends BaseTest {
 
     @Test(description = "Позитивный тест на логин")
-    public void positiveLoginTest() {
+    public void     positiveLoginTest() {
         loginPage.open();
         loginPage.login(UserFactory.withAdminPermission());
         soft.assertTrue(productsPage.checkDisplayingTitle(), "Заголовок не появился");

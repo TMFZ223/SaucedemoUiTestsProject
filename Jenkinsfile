@@ -1,9 +1,22 @@
 pipeline {
 
-    agent any
+    agent {
+        label "${params.TEST_NODE}"
+    }
+
+    parameters {
+        choice(
+            name: 'TEST_NODE',
+            choices: [
+                'linux',
+                'windows'
+            ],
+            description: 'Узел Jenkins, на котором будут выполняться тесты'
+        )
+    }
 
     tools {
-        jdk 'JDK17'
+        jdk 'JDK21'
         maven 'Maven3'
     }
 
@@ -14,22 +27,34 @@ pipeline {
 
     stages {
 
-        stage('Parallel Tests') {
+        stage('Show selected node') {
+            steps {
+                echo "Selected Jenkins node: ${params.TEST_NODE}"
+                echo "Jenkins node name: ${env.NODE_NAME}"
+                echo "Workspace: ${env.WORKSPACE}"
+                echo "OS: ${isUnix() ? 'Unix/Linux' : 'Windows'}"
+            }
+        }
 
+        stage('Parallel Tests') {
             parallel {
 
                 stage('Chrome') {
-
                     steps {
-
                         dir('chromeWorkspace') {
+                            deleteDir()
 
                             git branch: 'master',
                                 url: 'https://github.com/tMFZ223/SaucedemoUiTestsProject.git'
 
                             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-
-                                bat 'mvn clean test -P chrome -Dmaven.repo.local=.m2'
+                                script {
+                                    if (isUnix()) {
+                                        sh 'mvn clean test -P chrome -Dmaven.repo.local=.m2'
+                                    } else {
+                                        bat 'mvn clean test -P chrome -Dmaven.repo.local=.m2'
+                                    }
+                                }
 
                                 stash(
                                     name: 'chrome-allure',
@@ -48,17 +73,20 @@ pipeline {
                 }
 
                 stage('Firefox') {
-
                     steps {
-
                         dir('firefoxWorkspace') {
+                            deleteDir()
 
                             git branch: 'master',
                                 url: 'https://github.com/tMFZ223/SaucedemoUiTestsProject.git'
-
                             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-
-                                bat 'mvn clean test -P firefox -Dmaven.repo.local=.m2'
+                                script {
+                                    if (isUnix()) {
+                                        sh 'mvn clean test -P firefox -Dmaven.repo.local=.m2'
+                                    } else {
+                                        bat 'mvn clean test -P firefox -Dmaven.repo.local=.m2'
+                                    }
+                                }
 
                                 stash(
                                     name: 'firefox-allure',
@@ -79,24 +107,19 @@ pipeline {
         }
 
         stage('Collect Reports') {
-
             steps {
-
                 script {
-
                     dir('mergedReports/chrome') {
-
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-
+                            deleteDir()
                             unstash 'chrome-allure'
                             unstash 'chrome-surefire'
                         }
                     }
 
                     dir('mergedReports/firefox') {
-
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-
+                            deleteDir()
                             unstash 'firefox-allure'
                             unstash 'firefox-surefire'
                         }
@@ -107,9 +130,7 @@ pipeline {
     }
 
     post {
-
         always {
-
             junit(
                 testResults: '''
                     mergedReports/chrome/target/surefire-reports/**/*.xml,
@@ -119,7 +140,6 @@ pipeline {
             )
 
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-
                 allure(
                     includeProperties: false,
                     results: [
@@ -130,7 +150,6 @@ pipeline {
             }
 
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-
                 publishHTML([
                     allowMissing: true,
                     alwaysLinkToLastBuild: true,
@@ -142,7 +161,6 @@ pipeline {
             }
 
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-
                 publishHTML([
                     allowMissing: true,
                     alwaysLinkToLastBuild: true,
