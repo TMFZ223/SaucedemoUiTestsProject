@@ -40,7 +40,7 @@ public class BaseTest {
             driver.manage().window().maximize();
         } else if (browser.equalsIgnoreCase("firefox")) {
             FirefoxOptions options = new FirefoxOptions();
-            options.addArguments("--headless", "--no-sandbox");
+            options.addArguments("--headless", "--no-sandbox", "--disable-gpu");
             WebDriverManager.firefoxdriver().setup();
             driver = new FirefoxDriver(options);
             driver.manage().window().maximize();
